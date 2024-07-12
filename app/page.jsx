@@ -3,7 +3,8 @@ import Image from "next/image";
 import { useState } from "react";
 import { Button, Input } from "@nextui-org/react";
 import { Card, CardBody } from "@nextui-org/react";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Home() {
   const apiKey = "ceaa83dd37822a9a84db3ca8c504926e";
 
@@ -11,7 +12,8 @@ export default function Home() {
   const [weather, setWeather] = useState();
   const handleSearch = async () => {
     if (location.trim() === "") {
-      alert("Invalid Location");
+      toast.error("Invalid Location");
+      return;
     }
     try {
       const res = await fetch(
@@ -20,8 +22,11 @@ export default function Home() {
       if (res.ok) {
         const data = await res.json();
         setWeather(data);
+      }else{
+        toast.error('Location not found')
       }
     } catch (error) {
+      toast.error("Error in searching")
       console.log(error);
     }
   };
@@ -31,30 +36,32 @@ export default function Home() {
     }
   };
   return (
-    <main className="w-full min-h-full h-auto  bg flex items-center px-20 overflow-x-hidden overflow-y-hidden ">
-      <div className="-w-full md:w-3/6 h-screen  flex  flex-col gap-y-1 p-5 justify-center items-center">
+    <main className="w-full min-h-full h-auto  bg flex md:flex-row flex-col items-center md:px-20  overflow-x-hidden overflow-y-hidden ">
+              <ToastContainer />
+
+      <div className="-w-full w-full md:w-3/6 h-screen  flex  flex-col gap-y-1 p-5 justify-center items-center">
         <img
           src={"/images/home-cloud.webp"}
           width={350}
           height={350}
-          className="-mt-40"
+          className="md:-mt-40"
         />
         <h2
-          className="text-5xl text-slate-100 drop-shadow-md font-extrabold mb-10 -mt-10
+          className="text-5xl text-slate-100 text-center drop-shadow-md font-extrabold mb-10 -mt-10
         "
         >
           {" "}
           Weather App
         </h2>
-        <h2  className="px-28 text-center  text-slate-100 drop-shadow-md font-semibold 
+        <h2  className="md:px-28 text-center  text-slate-100 drop-shadow-md font-semibold 
         ">
           Welcome to the Weather App, your ultimate companion for staying
           updated on the latest weather conditions. 
      
         </h2>
       </div>
-      <div className="w-full md:w-3/6 h-full flex flex-col justify-center p-20 gap-y-4  rounded-lg">
-        <div className="flex gap-5">
+      <div className="w-full md:w-3/6 h-full flex flex-col justify-center p-5 md:p-20  gap-y-4  rounded-lg">
+        <div className="flex gap-2 md:gap-5">
           <Input
             type="text"
             color=""
@@ -88,7 +95,7 @@ export default function Home() {
                 <h2>
                   {weather?.name} , {weather?.sys?.country}
                 </h2>
-                <div className="w-full flex gap-2 my-5 justify-evenly h-auto">
+                <div className="w-full flex md:flex-row flex-col gap-2 my-5 justify-evenly h-auto">
                   <Cards
                     title="Humidity"
                     value={`${weather?.main?.humidity}%`}
