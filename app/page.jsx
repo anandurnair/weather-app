@@ -15,7 +15,7 @@ export default function Home() {
     }
     try {
       const res = await fetch(
-        `http://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=${apiKey}&units=metric`
+        `https://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=${apiKey}&units=metric`
       );
       if (res.ok) {
         const data = await res.json();
